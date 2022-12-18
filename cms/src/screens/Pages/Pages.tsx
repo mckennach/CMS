@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import CreatePage from './CreatePage';
-import PagesList from './PagesList';
+import CreatePage from '../../components/Pages/CreatePage';
+import PagesList from '../../components/Pages/PagesList';
+
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 const Pages = () => {
     const [pages, setPages] = useState([]);
@@ -27,8 +30,8 @@ const Pages = () => {
     }
   
    return (
-    <div>
-      <h1>Pages</h1>
+    <Box sx={{ width: '100%' }}>
+      <Typography variant="h2" gutterBottom>Pages</Typography>
       <CreatePage
         pages={pages}
         setPages={setPages}
@@ -37,7 +40,7 @@ const Pages = () => {
       <PagesList 
         pages={pages} 
         setPages={setPages} />
-    </div>
+    </Box>
    )
 }
 

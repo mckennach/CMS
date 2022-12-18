@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import AddBlock from '../../components/Blocks/AddBlock';
 import BlockList from '../../components/Blocks/BlockList';
- 
-export default function Page() {
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
+const PageEdit = () => {
  const [form, setForm] = useState({
    name: "",
    position: "",
@@ -22,9 +24,12 @@ export default function Page() {
  }, [params.id, navigate]);
 
 
-  async function fetchData() {
+ 
+
+
+  const fetchData = async () => {
      const id = params.id.toString();
-     const response = await fetch(`http://localhost:3000/pages/${params.id.toString()}`);
+     const response = await fetch(`http://localhost:3000/pages/edit/${params.id.toString()}`);
      if (!response.ok) {
        const message = `An error has occurred: ${response.statusText}`;
        window.alert(message);
@@ -74,15 +79,16 @@ if(data === null) return null;
  
  // This following section will display the form that takes input from the user to update the data.
  return (
-   <div>
-     <h2>Configure <u>{data.title}</u></h2>
-     <div>
-        <AddBlock navigate={navigate} data={data} setData={setData} setBlocks={setBlocks} fetchData={fetchData} />
-     </div>
-     <div>
-        <h3>Block List</h3>
-        <BlockList navigate={navigate} data={data} setData={setData} blocks={blocks} setBlocks={setBlocks} fetchData={fetchData} />
-     </div>
-   </div>
+   <Box>
+      <Box className="d-flex justify-content-between align-items-center pb-5 pt-2">
+        <Typography variant="h2" gutterBottom>Edit <u>{data.title}</u></Typography>
+      </Box>
+  
+      <Box>
+        <BlockList navigate={navigate} data={data} setData={setData} blocks={blocks} setBlocks={setBlocks} fetchData={fetchData} route={`edit`}  />
+      </Box>
+   </Box>
  );
 }
+
+export default PageEdit;

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const { Schema, model } = mongoose;
 
 const blockSchema = new Schema({
@@ -16,8 +17,14 @@ const blockSchema = new Schema({
         required: true,
         default: 'Plain Text'
     },
+    typeSlug: {
+        type: String, 
+        slug: ["type"], 
+        unique: true
+    },
     content: {
-        type: Object
+        type: Object,
+        required: true
     }
 });
 

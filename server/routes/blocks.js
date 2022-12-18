@@ -28,9 +28,10 @@ blockRoutes.post("/blocks/add", async (req, res) => {
 });
 
 // UPDATE
-blockRoutes.put("/blocks/update/:id", async (req, res) => {
+blockRoutes.post("/blocks/update/:id", async (req, res) => {
     const { id } = req.params;
-    await Block.updateOne({ id }, req.body);
+    console.log(id);
+    await Block.updateOne({ _id: id }, { $set: {...req.body}});
     const updatedBlock = await Block.findById(id);
     return res.status(200).json(updatedBlock);
 });

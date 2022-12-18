@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
- 
+import AddIcon from '@mui/icons-material/Add';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 
 
-
-const AddBlock = (props) => {
+const AddBlock = (props: any) => {
 
     const { data, navigate, setData, setBlocks, fetchData } = props;
     const { _id, content } = data;
@@ -20,7 +22,9 @@ const AddBlock = (props) => {
           const newBlock = { 
               name: "New Block",
               type: "Plain Text",
-              content: {}
+              content: {
+                text: ''
+              }
           };
 
           await fetch("http://localhost:3000/blocks/add", {
@@ -52,7 +56,7 @@ const AddBlock = (props) => {
 
                   // setBlocks(d1.content);
                   // setData(d1);
-                  navigate(`/pages/${_id}`);
+                  navigate(`/pages/configure/${_id}`);
                 });                
               })
               .catch(error => {
@@ -74,17 +78,16 @@ const AddBlock = (props) => {
   
   // This following section will display the form that takes the input from the user.
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <input
-            type="submit"
-            value="Add a Block"
-            className="btn btn-primary"
-          />
-        </div>
-      </form>
-    </div>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
+      <Typography variant="h5">Block List</Typography>
+      <Box component="form" onSubmit={onSubmit}>
+        <Box className="form-group">
+          <Box className="form-group">
+            <Button variant="contained"  type="submit" startIcon={<AddIcon/>}  children="New Block" />
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 

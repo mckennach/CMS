@@ -1,0 +1,294 @@
+/**
+ * Sets a media query for the specified breakpoint
+ *
+ * Accepts:
+ * - $media-query: {String} Breakpoint variable (list found in variables.scss)
+ *
+ * Usage:
+ * .selector {
+ *   @include media-query($medium-up) {
+ *     color: red;
+ *   }
+ * }
+ */
+ @mixin media-query($media-query) {
+    $breakpoint-found: false;
+  
+    @each $breakpoint in $breakpoints {
+      $name: nth($breakpoint, 1);
+      $declaration: nth($breakpoint, 2);
+  
+      @if $media-query == $name and $declaration {
+        $breakpoint-found: true;
+  
+        @media only screen and #{$declaration} {
+          @content;
+        }
+      }
+    }
+  }
+  
+  /**
+   * Outputs list of transition properties
+   *
+   * Accepts:
+   * - $transitions: {String} List of transition properties to set
+   *
+   * Usage:
+   * .selector {
+   *   @include transition(width, height 0.5s ease-in);
+   * }
+   */
+  @mixin transition($transitions...) {
+    $output: ();
+  
+    @each $transition in $transitions {
+      $output: append($output, get-transition-properties($transition), comma);
+    }
+    -webkit-transition: $output;
+    -o-transition: $output;
+    -moz-transition: $output;
+    transition: $output;
+  }
+  
+  /**
+   * Forces an element to self-clear its children
+   *
+   * Usage:
+   * .selector {
+   *   @include clearfix;
+   * }
+   */
+  @mixin clearfix() {
+    &::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  
+    // stylelint-disable-next-line
+    *zoom: 1;
+  }
+  
+  /**
+   * Hide element but make it accessible to screen readers
+   *
+   * Usage:
+   * .selector {
+   *   @include visually-hidden;
+   * }
+   */
+  @mixin visually-hidden() {
+    // stylelint-disable-next-line
+    position: absolute !important;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+  }
+  
+  /**
+   * Reverse the properties applied by @mixin visually-hidden
+   *
+   * Accepts:
+   * - $position: {String} Positioning method for element
+   *
+   * Usage:
+   * .selector {
+   *   @include visually-shown(relative);
+   * }
+   */
+  @mixin visually-shown($position: inherit) {
+    // stylelint-disable-next-line
+    position: $position !important;
+    overflow: auto;
+    width: auto;
+    height: auto;
+    margin: 0;
+    clip: auto;
+  }
+  
+  /**
+   * Other goodies
+   */
+  @function rems($pxsize, $root: 16) {
+    @return ($pxsize/$root)*1rem;
+  }
+  
+  @function strip-unit($number) {
+    @if type-of($number) == 'number' and not unitless($number) {
+      @return $number / ($number * 0 + 1);
+    }
+    @return $number;
+  }
+  
+  @mixin tracking($tracking) {
+    letter-spacing: ($tracking / 1000) * 1em;
+  }
+  
+  @mixin make-container-fixed() {
+    @include make-container();
+    @include make-container-max-widths();
+  }
+  
+  @mixin make-col-auto() {
+    -webkit-flex-basis: 0;
+        -ms-flex-preferred-size: 0;
+            flex-basis: 0;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+       -moz-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    max-width: 100%;
+  }
+  
+  @mixin object-fit($pos: 50% 50%, $fit: cover, $position: absolute) {
+    position: $position;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -o-object-fit: $fit;
+       object-fit: $fit;
+    -o-object-position: $pos;
+       object-position: $pos;
+  }
+  
+  @mixin aspect-ratio($width, $height, $pos: 50% 50%, $fit: cover, $position: absolute, $img: true) {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    padding-bottom: ($height / $width) * 100%;
+    height: 0;
+    img {
+      position: $position;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      -o-object-fit: $fit;
+         object-fit: $fit;
+      -o-object-position: $pos;
+         object-position: $pos;
+    }
+  }
+  
+  @mixin aspect-ratio-container($width, $height) {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    padding-bottom: ($height / $width) * 100%;
+    height: 0;
+  }
+  
+  @mixin abs($top: null, $right: null, $bottom: null, $left: null) {
+    position: absolute;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+  }
+  
+  @mixin headings-color($color) {
+    h1, h2, h3, h4, h5, h6,
+    .h1, .h2, .h3, .h4, .h5, .h6 {
+      color: $color;
+    }
+  }
+  
+  @mixin fullbleed() {
+    // see https://css-tricks.com/full-width-containers-limited-width-parents/
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw
+  }
+  
+  @mixin custom-row-padding($padding) {
+    margin-right: -$padding;
+    margin-left: -$padding;
+  }
+  @mixin custom-col-padding($padding) {
+    padding-right: $padding;
+    padding-left: $padding;
+  }
+  
+  @mixin uppercase() {
+    text-transform: uppercase;
+  }
+  
+  @mixin make-col-eq() {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 0;
+       -moz-box-flex: 1;
+        -ms-flex: 1 1 0px;
+            flex: 1 1 0;
+    max-width: 100%;
+  }
+  
+  @mixin make-col-fit() {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+       -moz-box-flex: 0;
+        -ms-flex: 0 0 auto;
+            flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;
+  }
+  
+  @mixin underline($color: #000, $thickness: 1px, $bottom: 100%, $inline: false) {
+    text-decoration: none;
+    background-image: -webkit-gradient(linear, left top, left bottom, from($color), to($color));
+    background-image: -webkit-linear-gradient($color, $color);
+    background-image: -moz-linear-gradient($color, $color);
+    background-image: -o-linear-gradient($color, $color);
+    background-image: linear-gradient($color, $color);
+    background-position: right $bottom;
+    background-repeat: no-repeat;
+    -webkit-background-size: 100% $thickness;
+       -moz-background-size: 100% $thickness;
+         -o-background-size: 100% $thickness;
+            background-size: 100% $thickness;
+    @if $inline {
+      display: inline-block;
+    }
+  }
+  
+  
+  /* --------------------------------------------------------------------------
+  Screen Size
+  -----------------------------------------------------------------------------*/
+  @mixin mobile-only {
+    @media (max-width: #{$tablet-width}) {
+      @content;
+    }
+  }
+  
+  @mixin tablet-down {
+    @media (max-width: #{$desktop-width}) {
+      @content;
+    }
+  }
+  
+  @mixin tablet-up {
+    @media (min-width: #{$tablet-width}) {
+      @content;
+    }
+  }
+  
+  @mixin desktop-up {
+    @media (min-width: #{$desktop-width}) {
+      @content;
+    }
+  }
+  

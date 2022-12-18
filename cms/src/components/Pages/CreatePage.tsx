@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
- 
-
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 
 
 const CreatePage = (props) => {
@@ -80,18 +82,14 @@ const CreatePage = (props) => {
   
   // This following section will display the form that takes the input from the user.
   return (
-    <div>
-      <h3>Create New Record</h3>
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <input
-            type="submit"
-            value="Create New Page"
-            className="btn btn-primary"
-          />
-        </div>
-      </form>
-    </div>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
+      <Typography variant="h5">Create New Record</Typography>
+      <Box component="form" onSubmit={onSubmit}>
+        <Box className="form-group">
+          <Button variant="contained"  type="submit" startIcon={<PostAddIcon />}  children="New Page" />
+        </Box>
+      </Box>
+    </Box>
   );
 }
 
